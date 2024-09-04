@@ -6,7 +6,7 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "remix build",
-    "dev": "remix build && run-p \"dev:*\"",
+    "dev": "cross-env NODE_ENV=development remix build --sourcemap && run-p \"dev:*\"",
     "dev:node": "cross-env NODE_ENV=development nodemon -r tsconfig-paths/register ./index.ts --watch ./index.ts",
     "dev:remix": "remix watch",
     "prod": "remix build && run-p start",

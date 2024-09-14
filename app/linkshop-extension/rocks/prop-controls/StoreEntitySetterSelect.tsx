@@ -23,8 +23,11 @@ export default {
 
     const onEntityChange = useCallback(
       (e: RockEvent) => {
-        const code = e.args[0];
-        const store = stores.find((store) => store.entityCode === code);
+        const name = e.args[0];
+        const store = stores.find((store) => store.name === name);
+        if (!store) {
+          return;
+        }
         //TODO: 应该只保存数据源的name或者id，而不是整个数据源配置。
         handleComponentEvent("onChange", framework, page, scope, props, onChange!, [store]);
       },
@@ -37,8 +40,8 @@ export default {
         $type: "antdSelect",
         $id: `store-selector_${stores?.length}`,
         style: { width: "100%" },
-        options: (stores || []).map((s) => ({ label: s.name, value: s.entityCode })),
-        value: value?.entityCode,
+        options: (stores || []).map((s) => ({ label: s.name, value: s.name })),
+        value: value?.name,
         onChange: {
           $action: "script",
           script: onEntityChange,

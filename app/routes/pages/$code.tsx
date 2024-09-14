@@ -1,16 +1,16 @@
-import { Framework, Page } from "@ruiapp/move-style";
 import type { PageConfig, RockConfig } from "@ruiapp/move-style";
+import { Framework, Page } from "@ruiapp/move-style";
 import { Rui } from "@ruiapp/react-renderer";
 import ReactRocks from "@ruiapp/react-rocks";
 import AntdExtension from "@ruiapp/antd-extension";
 import MonacoExtension from "@ruiapp/monaco-extension";
 import DesignerExtension from "@ruiapp/designer-extension";
-import RapidExtension, { rapidAppDefinition, RapidExtensionSetting } from "@ruiapp/rapid-extension";
+import type { RapidPage, RapidEntity, RapidDataDictionary } from "@ruiapp/rapid-extension";
+import RapidExtension, { rapidAppDefinition, RapidExtensionSetting, RapidPageGenerator } from "@ruiapp/rapid-extension";
 import { useMemo } from "react";
 import _, { find } from "lodash";
-import { redirect, type LoaderFunction } from "@remix-run/node";
+import { type LoaderFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import type { RapidPage, RapidEntity, RapidDataDictionary } from "@ruiapp/rapid-extension";
 import qs from "qs";
 
 import pageModels from "~/_definitions/meta/page-models";
@@ -21,8 +21,8 @@ import indexStyles from "~/styles/index.css";
 import styles from "antd/dist/antd.css";
 import rapidService from "~/rapidService";
 
-import { Avatar, Badge, Dropdown, PageHeader, Space } from "antd";
 import type { MenuProps } from "antd";
+import { Avatar, Badge, Dropdown, PageHeader, Space } from "antd";
 import { BellOutlined, ExportOutlined, KeyOutlined, ProfileOutlined, UserOutlined } from "@ant-design/icons";
 import { isAccessAllowed } from "~/utils/access-control-utility";
 import { RuiLoggerProvider } from "rui-logger";
@@ -124,7 +124,17 @@ export const loader: LoaderFunction = async ({ context, request, params }) => {
   }
 
   const pageCode = params.code;
-  const sdPage: RapidPage | undefined = find(pageModels, (item) => item.code === pageCode);
+  const pageLoader: RapidPage | RapidPageGenerator | undefined = find(pageModels, (item) => item.code === pageCode);
+
+  let sdPage: RapidPage;
+  if (pageLoader) {
+    const generator = pageLoader as RapidPageGenerator
+    if (generator.generateRapidPage) {
+      sdPage = generator.generateRapidPage({ context, request, params });
+    } else {
+      sdPage = pageLoader;
+    }
+  }
 
   const myAllowedActions = (
     await rapidService.get(`app/listMyAllowedSysActions`, {

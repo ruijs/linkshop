@@ -35,6 +35,7 @@ const defaultHiddenColumnFields = [
   "detetedBy", // for wrong typo
 ];
 
+// 排序靠前
 const frontFields = [
   "id",
   "code",
@@ -42,6 +43,7 @@ const frontFields = [
   "title",
 ];
 
+// 排序靠后
 const backFields = [
   "status",
   "state",
@@ -54,6 +56,7 @@ const backFields = [
   "detetedBy", // for wrong typo
 ];
 
+// 默认搜索框搜索内容
 const defaultSearchFilterFields = [
   "code",
   "name",
@@ -76,7 +79,6 @@ const pageGenerator: RapidPageGenerator = {
       // TODO
       return
     }
-
 
     const formConfig: Partial<RapidEntityFormConfig> = {
       items: [],
@@ -112,6 +114,12 @@ const pageGenerator: RapidPageGenerator = {
       const field = fieldMaps.get(code)!;
 
       if (field.relation == "many") {
+        // TODO
+        // 暂时跳过，需要实现
+        continue;
+      }
+
+      if (field.type == "json") {
         // TODO
         // 暂时跳过，需要实现
         continue;

@@ -28,9 +28,27 @@ export function links() {
 export const loader: LoaderFunction = async ({ request }) => {
   const findAppNavItemOption = {
     properties: ["id", "code", "name", "icon", "pageCode", "parent", "config"],
+    filters: [
+      {
+        operator: "exists",
+        field: "client",
+        filters: [
+          {
+            operator: "eq",
+            field: "code",
+            value: "web",
+          },
+        ],
+      },
+      {
+        field: "state",
+        operator: "eq",
+        value: "enabled",
+      },
+    ],
     orderBy: [
       {
-        field: "id",
+        field: "order_num",
       },
     ],
   };

@@ -115,6 +115,14 @@ const page: RapidPage = {
           dataSourceCode: "list",
           entityCode: "Model",
         },
+        {
+          $type: "anchor",
+          className: "rui-table-action-link",
+          children: "数据",
+          $exps: {
+            href: "'/pages/meta_model_data?code=' + $slot.record.singularCode",
+          },
+        },
       ],
       newForm: cloneDeep(formConfig),
       editForm: cloneDeep(formConfig),

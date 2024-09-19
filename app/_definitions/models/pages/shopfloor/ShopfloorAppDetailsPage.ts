@@ -2,7 +2,6 @@ import type { RapidPage } from "@ruiapp/rapid-extension";
 
 const page: RapidPage = {
   code: "shopfloor_app_details",
-  //@ts-ignore
   parentCode: "shopfloor_app_list",
   name: "应用详情",
   title: "应用详情",

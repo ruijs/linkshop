@@ -4,7 +4,7 @@ import * as antdIcons from "@ant-design/icons";
 import type { ItemType, MenuItemGroupType } from "antd/lib/menu/hooks/useItems";
 import { useMemo } from "react";
 import { arrayToTree } from "~/utils/array-utils";
-import { filter, keyBy, uniq } from "lodash";
+import { uniq } from "lodash";
 import pageModels from "~/_definitions/meta/page-models";
 
 export interface AppNavItem {
@@ -36,14 +36,17 @@ function getMenuItemFromNavItem(navItem: AppNavItem, appCode?: string): ItemType
   return menuItem;
 }
 
+
 function isValidNav(nav: AppNavItem) {
-  if (!!nav.children?.length) {
-    return true;
-  }
+  return true
 
-  const page = nav.pageCode && pageModels.find((m) => m.code === nav.pageCode);
-
-  return !!page;
+  // 导航配置应该所见即所得
+  // 是否展示，不应以是否存在 page 模型为条件
+  // if (!!nav.children?.length) {
+  //   return true;
+  // }
+  // const page = nav.pageCode && pageModels.find((m) => m.code === nav.pageCode);
+  // return !!page;
 }
 
 function getValidMenuItems(navTree: AppNavItem[]): AppNavItem[] {
@@ -107,5 +110,6 @@ export default function LeftNav(props: IProps) {
     return getMenuItems(navItems, appCode);
   }, [navItems]);
 
-  return <Menu selectedKeys={selectedKeys} defaultOpenKeys={selectedKeys} className="rui-left-nav-menu" theme="dark" mode="inline" items={menuItems} />;
+  return <Menu selectedKeys={selectedKeys} defaultOpenKeys={selectedKeys} className="rui-left-nav-menu" theme="dark" mode="inline"
+               items={menuItems} />;
 }

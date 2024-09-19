@@ -1,4 +1,4 @@
-import { cloneDeep, find, without, indexOf, intersection } from "lodash";
+import { cloneDeep, find, without, indexOf, intersection, merge } from "lodash";
 import type {
   RapidPage,
   RapidEntityFormConfig,
@@ -63,6 +63,14 @@ const defaultSearchFilterFields = [
   "description",
 ];
 
+const defaultRapidPage: RapidPage = {
+  code: "meta_model_data",
+  parentCode: "meta_model_list",
+  name: `数据管理`,
+  title: `数据管理`,
+  permissionCheck: { any: ["dev.manage"] },
+};
+
 const pageGenerator: RapidPageGenerator = {
   code: "meta_model_data",
   parentCode: "meta_model_list",
@@ -76,8 +84,7 @@ const pageGenerator: RapidPageGenerator = {
     const entity = find(appDefinition.entities, (item) => item.singularCode == modelCode);
 
     if (!entity || !entity.code) {
-      // TODO
-      return
+      return createErrorRapidPage(`不存在或未配置模型 code: ${modelCode}`);
     }
 
     const formConfig: Partial<RapidEntityFormConfig> = {
@@ -140,17 +147,40 @@ const pageGenerator: RapidPageGenerator = {
 
     rockConfig.searchForm = generateSearchForm(entity, fieldCodes, fieldMaps);
 
-    return {
-      code: "meta_model_data",
-      parentCode: "meta_model_list",
+    return createRapidPage({
       name: `数据管理 - ${entity.name}`,
       title: `数据管理 - ${entity.name}`,
-      permissionCheck: { any: ["dev.manage"] },
       view: rockConfig,
-    };
+    });
   },
 };
 
+function createRapidPage(page: any): RapidPage {
+  return merge(defaultRapidPage, page);
+}
+
+function createErrorRapidPage(title: string): RapidPage {
+  return merge(defaultRapidPage, {
+    view: {
+      $type: "antdResult",
+      title: title,
+      status: "error",
+      extra: [
+        {
+          $type: "antdButton",
+          type: "primary",
+          children: {
+            $type: "text",
+            text: "返回",
+          },
+          $exps: {
+            href: "'/pages/meta_model_list'",
+          },
+        },
+      ],
+    },
+  });
+}
 
 function orderFilterFieldCodes(codes: string[], excludes: string[]): string[] {
   let input = without(codes, ...excludes);

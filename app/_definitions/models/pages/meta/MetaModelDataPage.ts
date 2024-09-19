@@ -261,16 +261,18 @@ function generateSearchForm(entity: RapidEntity, fieldCodes: string[], fieldMap:
       code: code,
       filterMode: "eq",
     };
+
     if (field.relation == "many") {
       // TODO
       // 需要实现
       continue
+
     } else if (field.type == "datetime") {
-      // TODO
-      // 需要实现
-      continue
+      config.filterMode = "between"
+
     } else if (field.type == "text") {
       config.filterMode = "contains";
+
     }
     items.push(config);
   }

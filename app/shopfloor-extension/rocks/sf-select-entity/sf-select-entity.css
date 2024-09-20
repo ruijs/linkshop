@@ -1,0 +1,9 @@
+.sf-select-entity-button {
+  
+}
+
+.sf-select-entity-button .ant-select-selector  {
+  height: 100% !important;
+  border: 1px solid red;
+}
+

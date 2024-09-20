@@ -16,6 +16,9 @@ import LinkshopBuilderToolbar from "./linkshop-builder-toolbar/LinkshopBuilderTo
 import LinkshopBuilderTriggersPanel from "./linkshop-builder-triggers-panel/LinkshopBuilderTriggersPanel";
 import LinkshopBuilderVariablesPanel from "./linkshop-builder-variables-panel/LinkshopBuilderVariablesPanel";
 import LinkshopScannerProvider from "./linkshop-scanner-provider/LinkshopScannerProvider";
+import ModelTypeSetterSelect from "./prop-controls/ModelTypeSetterSelect";
+import ModelColumnsSetterSelect from "./prop-controls/ModelColumnsSetterSelect";
+
 
 // setters
 import DynamicArrayPropSetter from "./prop-setters/DynamicArrayPropSetter";
@@ -27,6 +30,10 @@ import LinkshopStepLayoutPropSetter from "./prop-setters/LinkshopStepLayoutPropS
 import StoreEntityPropSetter from "./prop-setters/StoreEntityPropSetter";
 import StoreEntitySetterSelect from "./prop-controls/StoreEntitySetterSelect";
 import TimePropSetter from "./prop-setters/TimePropSetter";
+import ModelTypeSetter from "./prop-setters/ModelTypeSetter";
+import ModelColumnsSetter from "./prop-setters/ModelColumnsSetter";
+import ModelSortSetter from "./prop-setters/ModelSortSetter";
+import ModelSortSetterSelect from "./prop-controls/ModelSortSetterSelect";
 
 export default [
   LinkshopApp,
@@ -47,6 +54,9 @@ export default [
   LinkshopBuilderVariablesPanel,
   LinkshopBuilderToolbar,
   LinkshopScannerProvider,
+  ModelTypeSetterSelect,
+  ModelColumnsSetterSelect,
+  ModelSortSetterSelect,
 
   // setters
   DynamicArrayPropSetter,
@@ -58,4 +68,7 @@ export default [
   StoreEntityPropSetter,
   StoreEntitySetterSelect,
   TimePropSetter,
+  ModelTypeSetter,
+  ModelColumnsSetter,
+  ModelSortSetter
 ];

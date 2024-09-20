@@ -259,6 +259,11 @@ export default {
             key: "sfQrcodeScanner",
             icon: <ScanOutlined />,
           },
+          {
+            label: "选择实体",
+            key: "sfSelectEntity",
+            icon: <ScanOutlined />,
+          },
         ],
       },
     ];

@@ -1,8 +1,17 @@
 import path from "path";
 import { type RapidModelsUpdateOptions, RapidModelsUpdater } from "@ruiapp/rapid-configure-tools";
+import { program } from "commander";
 
-import dataDictionaryModels from "~/_definitions/meta/data-dictionary-models";
-import entityModels from "~/_definitions/meta/entity-models";
+program
+  .option("-a --app-path <string>", "app path, if not exists then create", "");
+
+program.parse();
+
+const options = program.opts();
+
+
+const dataDictionaryModels = require(`~/${options.appPath}/_definitions/meta/data-dictionary-models`).default;
+const entityModels = require(`~/${options.appPath}/_definitions/meta/entity-models`).default;
 
 const env = process.env;
 

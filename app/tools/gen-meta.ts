@@ -1,8 +1,10 @@
 import chokidar from "chokidar";
 
-import { MetaFileGenerator } from "@ruiapp/rapid-configure-tools";
 import type { FileGenerateOption } from "@ruiapp/rapid-configure-tools";
+import { MetaFileGenerator } from "@ruiapp/rapid-configure-tools";
 import path from "path";
+import { program } from "commander";
+
 
 export function runGenerator(options: FileGenerateOption) {
   const { declarationsDirectory } = options;
@@ -30,6 +32,7 @@ export function runGenerator(options: FileGenerateOption) {
       fileGenerator.generateFiles(options);
     }
   }
+
   tryGenerate();
 
   watcher
@@ -48,7 +51,18 @@ export function runGenerator(options: FileGenerateOption) {
 //   declarationsDirectory: path.join(__dirname, "..", "_definitions"),
 // });
 
-const fileGenerator = new MetaFileGenerator();
-fileGenerator.generateFiles({
-  declarationsDirectory: path.join(__dirname, "..", "_definitions"),
+program
+  .option("-a --app-path <string>", "app path, if not exists then create", path.join(process.cwd(), "app"));
+
+program.parse();
+
+const options = program.opts();
+
+[
+  path.join(process.cwd(), options.appPath, "_definitions"),
+].forEach((dir) => {
+  const fileGenerator = new MetaFileGenerator();
+  fileGenerator.generateFiles({
+    declarationsDirectory: dir,
+  });
 });

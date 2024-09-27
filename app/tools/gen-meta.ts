@@ -52,14 +52,14 @@ export function runGenerator(options: FileGenerateOption) {
 // });
 
 program
-  .option("-a --app-path <string>", "app path, if not exists then create", path.join(process.cwd(), "app"));
+  .option("-a --app-path <string>", "app path, if not exists then create", "");
 
 program.parse();
 
 const options = program.opts();
 
 [
-  path.join(process.cwd(), options.appPath, "_definitions"),
+  path.join(process.cwd(), "app", options.appPath, "_definitions"),
 ].forEach((dir) => {
   const fileGenerator = new MetaFileGenerator();
   fileGenerator.generateFiles({

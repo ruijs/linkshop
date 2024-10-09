@@ -388,6 +388,47 @@ export default function Index() {
                                   });
                                 },
                               },
+                              onShortKeyEventHandle: {
+                                $action: "script",
+                                script: (event: any) => {
+                                  console.log(event);
+                                  const page = event.page;
+                                  const payload = event.args[0];
+                                  if (payload.type === "copy") {
+                                    sendDesignerCommand(page, page.getStore("designerStore"), {
+                                      name: "copyComponents",
+                                      payload: {
+                                        componentIds: [payload.widgetId],
+                                      },
+                                    });
+                                  }
+
+                                  if (payload.type === "cut") {
+                                    sendDesignerCommand(page, page.getStore("designerStore"), {
+                                      name: "cutComponents",
+                                      payload: {
+                                        componentIds: [payload.widgetId],
+                                      },
+                                    });
+                                  }
+
+                                  if (payload.type === "paste") {
+                                    sendDesignerCommand(page, page.getStore("designerStore"), {
+                                      name: "pasteComponents",
+                                      payload: {},
+                                    });
+                                  }
+
+                                  if (payload.type === "delete") {
+                                    sendDesignerCommand(page, page.getStore("designerStore"), {
+                                      name: "removeComponents",
+                                      payload: {
+                                        componentIds: [payload.widgetId],
+                                      },
+                                    });
+                                  }
+                                },
+                              },
                               $exps: {
                                 widgets: "hud.hudItemsFromRockChildrenConfig($stores.designerStore.page.getConfig().view)",
                               },

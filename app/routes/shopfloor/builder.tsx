@@ -427,6 +427,20 @@ export default function Index() {
                                       },
                                     });
                                   }
+
+                                  if (payload.type === "quash") {
+                                    sendDesignerCommand(page, page.getStore("designerStore"), {
+                                      name: "quash",
+                                      payload: {},
+                                    });
+                                  }
+
+                                  if (payload.type === "redo") {
+                                    sendDesignerCommand(page, page.getStore("designerStore"), {
+                                      name: "redo",
+                                      payload: {},
+                                    });
+                                  }
                                 },
                               },
                               $exps: {

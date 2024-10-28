@@ -8,7 +8,7 @@ import type {
   LinkshopAppStepRockConfig,
   LinkshopAppVariableConfig,
 } from "../linkshop-types";
-import { cloneDeep, find, map, some } from "lodash";
+import { cloneDeep, find, Function, map, some } from "lodash";
 import type { DesignStage } from "../designer-types";
 import rapidApi from "~/rapidApi";
 import { createRandomString, genRandomComponentId, sendDesignerCommand } from "../utilities/DesignerUtility";
@@ -19,6 +19,14 @@ import type { LinkshopAppRuntimeStateStoreConfig } from "./LinkshopAppRuntimeSta
 export interface LinkshopAppDesignerStoreConfig extends StoreConfigBase {
   appId?: string;
   appConfig?: LinkshopAppRockConfig;
+}
+
+let timer: any; // 维护同一个timer
+function debounce(fn: () => void, delay: number) {
+  clearTimeout(timer);
+  timer = setTimeout(function () {
+    fn(); //最后执行一次
+  }, delay);
 }
 
 const defaultAppConfig: LinkshopAppRockConfig = {
@@ -43,6 +51,8 @@ export class LinkshopAppDesignerStore implements IStore<LinkshopAppDesignerStore
   #selectedSlotPropName?: string;
   #snippets: RockConfig[];
   id: string;
+  processCommandQueue: PageConfig[];
+  currentProcessCommandQueueIndex: number = 0;
 
   #bindableManager: BindableManager;
   #runtimeState: LinkshopAppRuntimeState;
@@ -71,6 +81,8 @@ export class LinkshopAppDesignerStore implements IStore<LinkshopAppDesignerStore
     });
 
     this.appConfig = defaultAppConfig;
+
+    this.processCommandQueue = [];
   }
 
   get name(): string {
@@ -282,6 +294,7 @@ export class LinkshopAppDesignerStore implements IStore<LinkshopAppDesignerStore
   }
 
   processCommand(command: DesignerPageCommand) {
+    console.log(command)
     if (command.name === "setPageConfig") {
       // 这里的 setPageConfig 是 step 切换引起的
       const { payload } = command;
@@ -398,9 +411,37 @@ export class LinkshopAppDesignerStore implements IStore<LinkshopAppDesignerStore
       } as LinkshopAppRockConfig);
     } else if (command.name === "setRuntimeStateVariables") {
       (this.#page.scope.vars.runtimeState as LinkshopAppRuntimeState).setVariables(command.payload.variables);
+    } else if (command.name === "quash") {
+      if (this.processCommandQueue.length <= 1) {
+        return;
+      }
+
+      this.currentProcessCommandQueueIndex = this.currentProcessCommandQueueIndex - 1;
+
+      const config = cloneDeep(this.processCommandQueue[this.currentProcessCommandQueueIndex]);
+
+      this.#page.setConfig(config);
+    } else if (command.name === "redo") {
+      this.currentProcessCommandQueueIndex = this.currentProcessCommandQueueIndex + 1;
+
+      if (this.currentProcessCommandQueueIndex > this.processCommandQueue.length - 1) {
+        return;
+      }
+
+      const config = cloneDeep(this.processCommandQueue[this.currentProcessCommandQueueIndex]);
+      this.#page.setConfig(config);
     }
 
-    // this.#emitter.emit("dataChange", null);
+    if (command.name !== "quash" && command.name !== "redo") {
+      const config = cloneDeep(this.#page.getConfig())
+      const queue = this.processCommandQueue.slice(0, this.currentProcessCommandQueueIndex + 1)
+
+      // 防抖
+      debounce(()=>{
+        this.processCommandQueue = [...queue, config];
+        this.currentProcessCommandQueueIndex = this.processCommandQueue.length - 1;
+      }, 500)
+    }
   }
 
   addStep(step: LinkshopAppStepRockConfig) {

@@ -475,6 +475,19 @@ export default {
             name: "UndoOutlined",
           },
         },
+        onClick: [
+          {
+            $action: "script",
+            script: (event: RockEvent) => {
+              const designerPage = event.page;
+
+              sendDesignerCommand(designerPage, designerStore, {
+                name: "quash",
+                payload: {},
+              });
+            },
+          },
+        ],
       },
       {
         $type: "antdTooltip",
@@ -486,6 +499,19 @@ export default {
             name: "RedoOutlined",
           },
         },
+        onClick: [
+          {
+            $action: "script",
+            script: (event: RockEvent) => {
+              const designerPage = event.page;
+
+              sendDesignerCommand(designerPage, designerStore, {
+                name: "redo",
+                payload: {},
+              });
+            },
+          },
+        ],
       },
     ];
 

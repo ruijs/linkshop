@@ -12,8 +12,7 @@ import _, { find } from "lodash";
 import { type LoaderFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import qs from "qs";
-
-import pageModels from "~/_definitions/meta/page-models";
+import { pageModels } from "~/definitions";
 
 import AppExtension from "~/app-extension/mod";
 

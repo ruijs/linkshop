@@ -1,0 +1,14 @@
+#!/bin/bash
+
+BUILD_DATE=`date '+%Y%m%d'`
+IMAGE_TAG=`git describe --tags --always`
+BASE_IMAGE_TAG=$IMAGE_TAG
+
+docker build -f ./tools/builder-image.Dockerfile -t linkshop-builder:${BASE_IMAGE_TAG} .
+
+docker build \
+  --build-arg BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
+  -f ./tools/production-image.Dockerfile \
+  -t linkshop:${BUILD_DATE}-${IMAGE_TAG} .
+
+docker tag linkshop:${BUILD_DATE}-${IMAGE_TAG} linkshop:latest

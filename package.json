@@ -1,8 +1,8 @@
 {
   "private": true,
-  "name": "project-matrix",
+  "name": "linkshop",
   "version": "0.0.3",
-  "description": "Project management system based on Rui & Rapid.",
+  "description": "MOM application builder.",
   "main": "lib/index.js",
   "scripts": {
     "build": "remix build",

@@ -1,11 +1,11 @@
 ARG BASE_IMAGE_TAG=latest
-FROM project-matrix-builder:$BASE_IMAGE_TAG AS builder
+FROM linkshop-builder:$BASE_IMAGE_TAG AS builder
 
 COPY . .
 RUN pnpm build
 
 
-FROM project-matrix-runner:$BASE_IMAGE_TAG
+FROM linkshop-runner:$BASE_IMAGE_TAG
 
 COPY --from=builder /app/build ./build
 COPY --from=builder /app/public ./public

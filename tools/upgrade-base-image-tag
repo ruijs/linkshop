@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sha1sum ./pnpm-lock.yaml > ./pnpm-lock.yaml.sha1
+git describe --tags --always > ./tools/base-image-tag

@@ -1,4 +1,4 @@
-FROM node:18.20.4-alpine3.20 as stage
+FROM node:22.11.0-alpine3.20 as stage
 RUN corepack enable
 RUN pnpm config set registry https://registry.npmmirror.com/
 
@@ -9,7 +9,7 @@ COPY ./pnpm-lock.yaml ./
 RUN pnpm install
 
 
-FROM node:18.20.4-alpine3.20
+FROM node:22.11.0-alpine3.20
 RUN corepack enable
 RUN pnpm config set registry https://registry.npmmirror.com/
 

@@ -7,6 +7,19 @@ export default {
 
   slots: {},
 
+  events: [
+    {
+      name: "onEnterStep",
+      label: "onEnterStep",
+      args: {},
+    },
+    {
+      name: "onLeaveStep",
+      label: "onLeaveStep",
+      args: {},
+    },
+  ],
+ 
   propertyPanels: [
     {
       $type: "componentPropPanel",

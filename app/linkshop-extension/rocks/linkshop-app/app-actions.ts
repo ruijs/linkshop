@@ -13,6 +13,12 @@ const appActionMap: Record<string, Rock["onReceiveMessage"]> = {
   gotoStepByName: (message, state, props) => {
     state.switchStepByName(message.payload.$name);
   },
+  enterStep: (message, state, props) => {
+    state.enterStep(message.payload);
+  },
+  leaveStep: (message, state, props) => {
+    state.leaveStep(message.payload);
+  },
 };
 
 export default appActionMap;

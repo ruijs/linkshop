@@ -391,7 +391,6 @@ export default function Index() {
                               onShortKeyEventHandle: {
                                 $action: "script",
                                 script: (event: any) => {
-                                  console.log(event);
                                   const page = event.page;
                                   const payload = event.args[0];
                                   if (payload.type === "copy") {
@@ -576,6 +575,7 @@ export default function Index() {
                                   $exps: {
                                     designingPage: "$stores.designerStore.page",
                                     selectedComponentId: "$stores.designerStore.selectedComponentId",
+                                    currentStep: "$stores.designerStore.currentStep",
                                   },
                                 },
                               ],

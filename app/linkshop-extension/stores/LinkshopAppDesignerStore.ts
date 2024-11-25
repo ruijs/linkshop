@@ -294,7 +294,6 @@ export class LinkshopAppDesignerStore implements IStore<LinkshopAppDesignerStore
   }
 
   processCommand(command: DesignerPageCommand) {
-    console.log(command)
     if (command.name === "setPageConfig") {
       // 这里的 setPageConfig 是 step 切换引起的
       const { payload } = command;

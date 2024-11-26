@@ -18,6 +18,13 @@ export default {
       label: "onLeaveStep",
       args: {},
     },
+    {
+      name: "onInterval",
+      label: "onIntervalBy60s",
+      args: {
+        interval: 60000,
+      },
+    }
   ],
  
   propertyPanels: [

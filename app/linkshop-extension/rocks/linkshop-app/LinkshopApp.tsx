@@ -8,6 +8,8 @@ import appActionMap from "./app-actions";
 import { useEffect, useState } from "react";
 import { find, isArray, isEmpty } from "lodash";
 
+let timer: NodeJS.Timeout | undefined
+
 export default {
   onResolveState(props, state) {
     const { steps, _context } = props;
@@ -57,10 +59,22 @@ export default {
         if(step.onEnterStep) {
           handleComponentEvent("script", framework, page, scope, step, step.onEnterStep, [step])
         }
+        if(step.onInterval) {
+          if(!timer) {
+            timer = setInterval(() => {
+              handleComponentEvent("script", framework, page, scope, step, step.onInterval, [step])
+            }, step.onInterval.blockly?.args?.interval || 60000)
+          }
+        }
       },
       leaveStep: (step: LinkshopAppStepRockConfig) => {
         if(step.onLeaveStep) {
           handleComponentEvent("script", framework, page, scope, step, step.onLeaveStep, [step])
+        }
+        if(step.onInterval) {
+          if (timer) {
+            clearInterval(timer)
+          }
         }
       },
     };

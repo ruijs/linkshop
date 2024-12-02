@@ -22,7 +22,7 @@ export default {
       name: "onInterval",
       label: "onIntervalBy60s",
       args: {
-        interval: 60000,
+        useIntervalTime: true,
       },
     }
   ],

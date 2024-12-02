@@ -63,7 +63,7 @@ export default {
           if(!timer) {
             timer = setInterval(() => {
               handleComponentEvent("script", framework, page, scope, step, step.onInterval, [step])
-            }, step.onInterval.blockly?.args?.interval || 60000)
+            }, step.intervalTime * 1000 || 60000)
           }
         }
       },

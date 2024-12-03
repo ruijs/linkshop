@@ -30,6 +30,11 @@ export default {
       label: "onClick",
       args: {},
     },
+    {
+      name: "onEnterStep",
+      label: "onEnterStep",
+      args: {},
+    },
   ],
 
   propertyPanels: [

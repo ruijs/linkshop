@@ -1,4 +1,5 @@
 import type { Rock, RockConfig } from "@ruiapp/move-style";
+import { handleComponentEvent } from '@ruiapp/move-style'
 import ShopfloorAppMeta from "./LinkshopAppMeta";
 import { renderRock } from "@ruiapp/react-renderer";
 import type { LinkshopAppLayoutRockConfig, LinkshopAppRockConfig, LinkshopAppStepRockConfig } from "~/linkshop-extension/linkshop-types";
@@ -7,9 +8,12 @@ import appActionMap from "./app-actions";
 import { useEffect, useState } from "react";
 import { find, isArray, isEmpty } from "lodash";
 
+let timer: NodeJS.Timeout | undefined
+
 export default {
   onResolveState(props, state) {
-    const { steps } = props;
+    const { steps, _context } = props;
+    const { page, framework, scope } = _context
 
     const [currentStep, setCurrentStep] = useState<LinkshopAppStepRockConfig>(steps?.[0]);
     useEffect(() => {
@@ -50,6 +54,28 @@ export default {
           return;
         }
         setCurrentStep(steps[targetStepIndex]);
+      },
+      enterStep: (step: LinkshopAppStepRockConfig) => {
+        if(step.onEnterStep) {
+          handleComponentEvent("script", framework, page, scope, step, step.onEnterStep, [step])
+        }
+        if(step.onInterval) {
+          if(!timer) {
+            timer = setInterval(() => {
+              handleComponentEvent("script", framework, page, scope, step, step.onInterval, [step])
+            }, step.intervalTime * 1000 || 60000)
+          }
+        }
+      },
+      leaveStep: (step: LinkshopAppStepRockConfig) => {
+        if(step.onLeaveStep) {
+          handleComponentEvent("script", framework, page, scope, step, step.onLeaveStep, [step])
+        }
+        if(step.onInterval) {
+          if (timer) {
+            clearInterval(timer)
+          }
+        }
       },
     };
   },
@@ -106,6 +132,13 @@ export default {
       },
       children: currentStep.children,
     };
+
+    useEffect(() => {
+      props._context.page.sendComponentMessage("linkshopApp", { name: "enterStep", payload: currentStep });
+      return () => {
+        props._context.page.sendComponentMessage("linkshopApp", { name: "leaveStep", payload: currentStep });
+      };
+    }, [currentStep]);
 
     return renderRock({
       context,

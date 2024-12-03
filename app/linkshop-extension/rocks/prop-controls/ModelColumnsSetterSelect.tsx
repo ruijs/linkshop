@@ -116,8 +116,6 @@ export default {
     const { page, framework, scope } = context;
     const { onChange, value } = props;
 
-    console.log(value)
-
     const entities = rapidAppDefinition.getEntities();
 
     const entity = rapidAppDefinition.getEntityBySingularCode(value?.singularCode || "")

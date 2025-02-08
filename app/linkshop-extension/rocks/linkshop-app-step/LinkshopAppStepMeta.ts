@@ -7,6 +7,26 @@ export default {
 
   slots: {},
 
+  events: [
+    {
+      name: "onEnterStep",
+      label: "onEnterStep",
+      args: {},
+    },
+    {
+      name: "onLeaveStep",
+      label: "onLeaveStep",
+      args: {},
+    },
+    {
+      name: "onInterval",
+      label: "onIntervalBy60s",
+      args: {
+        useIntervalTime: true,
+      },
+    }
+  ],
+ 
   propertyPanels: [
     {
       $type: "componentPropPanel",
